@@ -29,11 +29,10 @@ class AuthController extends Controller
         $accessToken = $user->createToken('authToken')->accessToken;
 
         // return data
-        return response([
-            'user'=>$user,
+        return response()->json([
             'access_token'=>$accessToken,
-            'message'=>'You have successfully registered'
-        ]);
+            'message'=>'You have successfully registered',
+        ], 200);
     }
 
     /////////////////////////////////////////
@@ -48,19 +47,27 @@ class AuthController extends Controller
         ]);
 
         if(!auth()->attempt($validateLogin)){
-            return response([
+            return response()->json([
                 'message'=>'Invalid credentials'
-            ]);
+            ], 401);
         } else {
             // token generation
             $accessToken = auth()->user()->createToken('authToken')->accessToken;
             // return user
-            return response([
-                'user'=>auth()->user(),
+            return response()->json([
                 'access_token'=>$accessToken,
                 'message'=>'You have successfully loged-in'
-            ]);
+            ], 200);
         }
     }
 
+    /////////////////////////////////////////
+    // User details
+    /////////////////////////////////////////
+    public function details()
+    {
+        return response()->json([
+            'user'=>auth()->user(),
+        ], 200);
+    }
 }
