@@ -20,9 +20,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 /////////////////////////////////////////
 // Register
 /////////////////////////////////////////
-Route::post('register', 'Api\AuthController@register');
+Route::post('auth/register', 'Api\AuthController@register');
 
 /////////////////////////////////////////
 // Login
 /////////////////////////////////////////
-Route::post('login', 'Api\AuthController@login');
+Route::post('auth/login', 'Api\AuthController@login');
+
+/////////////////////////////////////////
+// Logout
+/////////////////////////////////////////
+Route::middleware('auth:api')->group(function () {
+    Route::post('auth/logout', 'Api\AuthController@logout');
+});

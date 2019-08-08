@@ -19,7 +19,8 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
-
+        
+        // encrypt password
         $validateRegister['password'] = bcrypt($request->password);
 
         // validate, then, create/register user
@@ -62,12 +63,13 @@ class AuthController extends Controller
     }
 
     /////////////////////////////////////////
-    // User details
+    // Logout
     /////////////////////////////////////////
-    public function details()
+    public function logout()
     {
-        return response()->json([
-            'user'=>auth()->user(),
-        ], 200);
+        auth()->user()->tokens->each(function ($token, $key) {
+            $token->delete();
+        });
+        return response()->json('Logged out successfully', 200);
     }
 }
